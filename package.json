@@ -1,5 +1,9 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "multer": "^2.2.0"
+=======
+    "@google/genai": "^2.11.0"
+>>>>>>> member3-ai
   }
 }
