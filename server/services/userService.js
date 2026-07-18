@@ -1,23 +1,27 @@
+import bcrypt from "bcrypt";
 import User from "../models/User.js";
 
 export const createUser = async (userData) => {
-    try {
-        const user = new User(userData);
-        return await user.save();
+  const existingUser = await User.findOne({ email: userData.email });
 
-    } catch (error) {
-        throw error;
-    }
+  if (existingUser) {
+    throw new Error("Email already exists");
+  }
+
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+  const user = new User({
+    ...userData,
+    password: hashedPassword,
+  });
+
+  return await user.save();
 };
 
-
 export const getUserById = async (userId) => {
-    try {
-        const user = await User.findById(userId);
+  return await User.findById(userId);
+};
 
-        return user;
-
-    } catch (error) {
-        throw error;
-    }
+export const findUserByEmail = async (email) => {
+  return await User.findOne({ email });
 };
