@@ -1,21 +1,26 @@
-const { GoogleGenAI } = require("@google/genai");
+import "dotenv/config";
+import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
-async function generateCareerAdvice(prompt) {
-    try {
-        const response = await ai.models.generateContent({
-           model: "models/gemini-flash-latest",
-            contents: prompt,
-        });
-
-        return response.text;
-    } catch (error) {
-        console.error("Gemini Service Error:", error);
-        throw error;
+export async function generateCareerAdvice(prompt) {
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error(
+        "GEMINI_API_KEY is missing from the environment variables.",
+      );
     }
-}
 
-module.exports = { generateCareerAdvice };
+    const response = await ai.models.generateContent({
+      model: "gemini-flash-latest",
+      contents: prompt,
+    });
+
+    return response.text;
+  } catch (error) {
+    console.error("Gemini Service Error:", error);
+    throw error;
+  }
+}

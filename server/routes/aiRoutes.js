@@ -1,9 +1,9 @@
-const express = require("express");
-const { getCareerAdvice } = require("../controllers/aiController");
+import express from "express";
+import { getCareerAdvice } from "../controllers/aiController.js";
 
 const router = express.Router();
 
 // POST /api/ai/career-advice
 router.post("/career-advice", getCareerAdvice);
 
-module.exports = router;
+export default router;

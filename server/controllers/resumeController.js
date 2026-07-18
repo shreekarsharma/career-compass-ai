@@ -27,13 +27,6 @@ export const uploadResume = async (req, res) => {
 
     const extractedText = await extractTextFromPDF(req.file.path);
 
-    // ===== DEBUG LOGS =====
-    console.log("========== UPLOAD DEBUG ==========");
-    console.log("req.user:", req.user);
-    console.log("req.file:", req.file);
-    console.log("==================================");
-    // =======================
-
     const savedResume = await saveResume({
       user: req.user.id,
       fileName: req.file.filename,
@@ -46,8 +39,6 @@ export const uploadResume = async (req, res) => {
       resume: savedResume,
     });
   } catch (error) {
-    console.error("UPLOAD ERROR:", error);
-
     res.status(500).json({
       message: error.message,
     });
