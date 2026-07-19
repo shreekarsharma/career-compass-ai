@@ -1,4 +1,5 @@
 import { generateCareerAdvice } from "../services/geminiService.js";
+import createJobPrompt from "../prompts/jobPrompt.js";
 
 export const getCareerAdvice = async (req, res) => {
   try {
@@ -24,6 +25,35 @@ export const getCareerAdvice = async (req, res) => {
       success: false,
       message: error.message,
       details: error,
+    });
+  }
+};
+
+export const getJobMatch = async (req, res) => {
+  try {
+    const { resume, jobDescription } = req.body;
+
+    if (!resume || !jobDescription) {
+      return res.status(400).json({
+        success: false,
+        message: "Resume and Job Description are required",
+      });
+    }
+
+    const prompt = createJobPrompt(resume, jobDescription);
+
+    const result = await generateCareerAdvice(prompt);
+
+    res.status(200).json({
+      success: true,
+      response: result,
+    });
+  } catch (error) {
+    console.error("Job Match Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
