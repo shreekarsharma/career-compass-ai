@@ -1,38 +1,59 @@
 import { useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
-import Input from "../components/Input";
+
 
 const JobMatch = () => {
-  const [jobDescription, setJobDescription] = useState("");
+ const [resume, setResume] = useState("");
+const [jobDescription, setJobDescription] = useState("");
+const [loading, setLoading] = useState(false);
+const [matchResult, setMatchResult] = useState(null);
 
-  // Temporary data (replace with API response later)
-  const matchResult = {
-    score: 85,
-    matchingSkills: [
-      "React",
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "Git",
-    ],
-    missingSkills: [
-      "Docker",
-      "AWS",
-      "TypeScript",
-    ],
-    suggestions: [
-      "Learn Docker fundamentals.",
-      "Gain experience with AWS cloud services.",
-      "Add TypeScript projects to your portfolio.",
-    ],
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(jobDescription);
-    // Connect to API later
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!resume || !jobDescription) {
+    alert("Please enter both resume and job description.");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const response = await fetch("http://localhost:5000/api/ai/job-match", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resume,
+        jobDescription,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.message);
+    }
+
+    const result = JSON.parse(data.response);
+
+    setMatchResult({
+      score: result.matchScore,
+      matchingSkills: result.matchingSkills,
+      missingSkills: result.missingSkills,
+      suggestions: result.suggestions,
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert("Failed to analyze job match.");
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
@@ -45,7 +66,15 @@ const JobMatch = () => {
           uploaded resume.
         </p>
       </div>
-
+<Card title="Resume">
+  <textarea
+    rows="8"
+    value={resume}
+    onChange={(e) => setResume(e.target.value)}
+    placeholder="Paste your resume here..."
+    className="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+</Card>
       {/* Job Description Form */}
       <Card title="Job Description">
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,13 +97,14 @@ const JobMatch = () => {
           </div>
 
           <Button type="submit">
-            Analyze Job Match
-          </Button>
+  {loading ? "Analyzing..." : "Analyze Job Match"}
+</Button>
         </form>
       </Card>
 
       {/* Results */}
-      <div className="grid gap-6 md:grid-cols-2">
+      {matchResult && (
+<div className="grid gap-6 md:grid-cols-2">
         <Card title="Match Score" hover>
           <h2 className="text-6xl font-bold text-blue-600">
             {matchResult.score}%
@@ -105,6 +135,7 @@ const JobMatch = () => {
           </ul>
         </Card>
       </div>
+)}
     </div>
   );
 };

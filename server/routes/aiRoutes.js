@@ -1,9 +1,15 @@
 const express = require("express");
-const { getCareerAdvice } = require("../controllers/aiController");
+const {
+    getCareerAdvice,
+    getJobMatch
+} = require("../controllers/aiController");
 
 const router = express.Router();
 
-// POST /api/ai/career-advice
+// Career Advice
 router.post("/career-advice", getCareerAdvice);
+
+// Job Match
+router.post("/job-match", getJobMatch);
 
 module.exports = router;
