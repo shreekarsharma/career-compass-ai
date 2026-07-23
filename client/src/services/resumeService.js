@@ -30,6 +30,26 @@ export const uploadResume = async (file) => {
   }
 };
 
+export const getResumeStatus = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(`${API_URL}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        message: "Failed to fetch resume status.",
+      }
+    );
+  }
+};
+
 export const deleteResume = async (id) => {
   const token = localStorage.getItem("token");
 

@@ -4,6 +4,7 @@ import { extractTextFromPDF } from "../utils/pdfParser.js";
 import {
   saveResume,
   getUserResumes,
+  getLatestResume,
 } from "../services/resumeService.js";
 
 // ===============================
@@ -16,6 +17,16 @@ export const uploadResume = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         message: "Please upload a PDF resume.",
+      });
+    }
+
+    // Check if the user already has a resume
+    const existingResume = await getLatestResume(req.user._id);
+
+    if (existingResume) {
+      return res.status(400).json({
+        success: false,
+        message: "Resume already uploaded.",
       });
     }
 

@@ -1,12 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
-import { uploadResume } from "../services/resumeService";
+import {
+  uploadResume,
+  getResumeStatus,
+} from "../services/resumeService";
 
 const ResumeUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hasResume, setHasResume] = useState(false);
+
+  useEffect(() => {
+  const checkResume = async () => {
+    try {
+      const resumes = await getResumeStatus();
+
+      if (resumes.length > 0) {
+        setHasResume(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  checkResume();
+}, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -68,6 +88,7 @@ const ResumeUpload = () => {
               type="file"
               accept=".pdf"
               onChange={handleFileChange}
+              disabled={hasResume}
               className="block w-full border border-gray-300 rounded-lg p-2
               file:mr-4 file:px-4 file:py-2
               file:border-0 file:rounded-md
@@ -93,10 +114,18 @@ const ResumeUpload = () => {
           {error && (
             <p className="text-red-600 font-medium">{error}</p>
           )}
-
-          <Button type="submit" disabled={loading}>
-            {loading ? "Uploading..." : "Upload Resume"}
-          </Button>
+{hasResume && (
+  <p className="text-blue-600 font-medium">
+    You have already uploaded a resume.
+  </p>
+)}
+          <Button type="submit" disabled={loading || hasResume}>
+  {loading
+    ? "Uploading..."
+    : hasResume
+    ? "Resume Already Uploaded"
+    : "Upload Resume"}
+</Button>
         </form>
       </Card>
     </div>
