@@ -1,36 +1,42 @@
-import ResumeAnalysis from "../models/ResumeAnalysis.js";
 import Resume from "../models/Resume.js";
 
-export const saveResumeAnalysis = async (resumeData) => {
-  try {
-    const analysis = new ResumeAnalysis(resumeData);
-    return await analysis.save();
-  } catch (error) {
-    throw error;
-  }
-};
+// ===============================
+// Save Resume
+// ===============================
 export const saveResume = async (resumeData) => {
-  try {
-    const resume = new Resume(resumeData);
-    return await resume.save();
-  } catch (error) {
-    throw error;
-  }
-};
-export const getResumeHistory = async () => {
-  try {
-    const history = await ResumeAnalysis.find();
-    return history;
-  } catch (error) {
-    throw error;
-  }
+  return await Resume.create(resumeData);
 };
 
-export const deleteResumeAnalysis = async (analysisId) => {
-  try {
-    const deletedAnalysis = await ResumeAnalysis.findByIdAndDelete(analysisId);
-    return deletedAnalysis;
-  } catch (error) {
-    throw error;
-  }
+// ===============================
+// Get All Resumes of Logged-in User
+// ===============================
+export const getUserResumes = async (userId) => {
+  return await Resume.find({ user: userId }).sort({
+    createdAt: -1,
+  });
+};
+
+// ===============================
+// Get Latest Resume
+// ===============================
+export const getLatestResume = async (userId) => {
+  return await Resume.findOne({
+    user: userId,
+  }).sort({
+    createdAt: -1,
+  });
+};
+
+// ===============================
+// Get Resume By ID
+// ===============================
+export const getResumeById = async (id) => {
+  return await Resume.findById(id);
+};
+
+// ===============================
+// Delete Resume
+// ===============================
+export const deleteResumeById = async (id) => {
+  return await Resume.findByIdAndDelete(id);
 };

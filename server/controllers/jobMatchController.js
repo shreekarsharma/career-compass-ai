@@ -1,28 +1,54 @@
 import {
-  saveJobMatch as saveJobMatchService,
-  getJobMatches as getJobMatchesService,
+  analyzeJobMatch,
+  getJobMatches,
 } from "../services/jobMatchService.js";
 
-export const saveJobMatch = async (req, res) => {
+export const analyzeResume = async (req, res) => {
   try {
-    const jobMatch = await saveJobMatchService(req.body);
+    const { jobDescription } = req.body;
 
-    res.status(201).json(jobMatch);
+    if (!jobDescription) {
+      return res.status(400).json({
+        success: false,
+        message: "Job description is required.",
+      });
+    }
+
+    const result = await analyzeJobMatch({
+      user: req.user._id,
+      jobDescription,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Job match analyzed successfully.",
+      data: result,
+    });
   } catch (error) {
+    console.error("Job Match Error:", error);
+
     res.status(500).json({
-      message: error.message,
+      success: false,
+      message: error.message || "Failed to analyze job match.",
     });
   }
 };
 
-export const getJobMatches = async (req, res) => {
+export const getAllJobMatches = async (req, res) => {
   try {
-    const matches = await getJobMatchesService();
+    const matches = await getJobMatches(req.user._id);
 
-    res.status(200).json(matches);
+    res.status(200).json({
+      success: true,
+      count: matches.length,
+      data: matches,
+    });
   } catch (error) {
+    console.error("Fetch Job Matches Error:", error);
+
     res.status(500).json({
-      message: error.message,
+      success: false,
+      message: error.message || "Failed to fetch job matches.",
     });
   }
 };

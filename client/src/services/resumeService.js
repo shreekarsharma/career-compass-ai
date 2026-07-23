@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/resume";
+const API_URL = "http://localhost:5000/api/resumes";
 
 export const uploadResume = async (file) => {
   try {
@@ -30,30 +30,19 @@ export const uploadResume = async (file) => {
   }
 };
 
-export const getResumeHistory = async () => {
-  try {
-    const token = localStorage.getItem("token");
+export const deleteResume = async (id) => {
+  const token = localStorage.getItem("token");
 
-    const response = await axios.get(
-      "http://localhost:5000/api/history",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    throw (
-      error.response?.data || {
-        message: "Failed to fetch resume history.",
-      }
-    );
-  }
+  return axios.delete(
+    `http://localhost:5000/api/resumes/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 };
 
 export default {
   uploadResume,
-  getResumeHistory,
 };

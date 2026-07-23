@@ -1,16 +1,16 @@
 import express from "express";
 import {
-  saveJobMatch,
-  getJobMatches,
+  analyzeResume,
+  getAllJobMatches,
 } from "../controllers/jobMatchController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Get all job matches
-router.get("/", protect, getJobMatches);
+// Analyze Resume Against Job Description
+router.post("/analyze", protect, analyzeResume);
 
-// Save a new job match
-router.post("/", protect, saveJobMatch);
+// Get Logged-in User's Job Match History
+router.get("/", protect, getAllJobMatches);
 
 export default router;

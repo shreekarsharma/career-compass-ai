@@ -1,64 +1,41 @@
+import { useEffect, useState } from "react";
 import Card from "../components/Card";
+import { getResumeAnalysis } from "../services/resumeAnalysisService";
 
 const ResumeAnalysis = () => {
-  // Temporary data (replace with API response later)
-  const analysis = {
-    summary:
-      "You have a solid foundation in frontend development with experience in React, JavaScript, and responsive web design.",
+  const [analysis, setAnalysis] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    skills: [
-      "React",
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "Tailwind CSS",
-      "Git",
-    ],
+  useEffect(() => {
+    const fetchAnalysis = async () => {
+      try {
+        const data = await getResumeAnalysis();
+        setAnalysis(data);
+      } catch (error) {
+        console.error("Failed to load analysis:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    strengths: [
-      "Strong frontend development skills.",
-      "Good understanding of responsive design.",
-      "Experience using React components.",
-    ],
+    fetchAnalysis();
+  }, []);
 
-    improvements: [
-      "Add more real-world projects.",
-      "Improve resume formatting.",
-      "Highlight measurable achievements.",
-    ],
+  if (loading) {
+    return (
+      <div className="text-center py-10 text-gray-600">
+        Loading resume analysis...
+      </div>
+    );
+  }
 
-    missingSkills: [
-      "Docker",
-      "TypeScript",
-      "AWS",
-    ],
-
-    careerPaths: [
-      "Frontend Developer",
-      "React Developer",
-      "UI Engineer",
-    ],
-
-    learningRoadmap: [
-      "Learn TypeScript.",
-      "Study Docker fundamentals.",
-      "Explore cloud deployment with AWS.",
-      "Build full-stack React applications.",
-    ],
-
-    courses: [
-      "Advanced React",
-      "TypeScript for Beginners",
-      "Docker Essentials",
-    ],
-
-    interviewQuestions: [
-      "What are React Hooks?",
-      "Explain the Virtual DOM.",
-      "Difference between let, const, and var.",
-      "What is state management in React?",
-    ],
-  };
+  if (!analysis) {
+    return (
+      <div className="text-center py-10 text-red-600">
+        No resume analysis found. Please upload and analyze your resume first.
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -78,11 +55,11 @@ const ResumeAnalysis = () => {
         <p className="text-gray-700">{analysis.summary}</p>
       </Card>
 
-      {/* Grid Sections */}
+      {/* Grid */}
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="Skills" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.skills.map((skill) => (
+            {analysis.skills?.map((skill) => (
               <li key={skill}>{skill}</li>
             ))}
           </ul>
@@ -90,7 +67,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Strengths" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.strengths.map((item) => (
+            {analysis.strengths?.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -98,7 +75,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Areas for Improvement" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.improvements.map((item) => (
+            {analysis.improvements?.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -106,7 +83,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Missing Skills" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.missingSkills.map((skill) => (
+            {analysis.missingSkills?.map((skill) => (
               <li key={skill}>{skill}</li>
             ))}
           </ul>
@@ -114,7 +91,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Recommended Career Paths" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.careerPaths.map((path) => (
+            {analysis.careerPaths?.map((path) => (
               <li key={path}>{path}</li>
             ))}
           </ul>
@@ -122,7 +99,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Learning Roadmap" hover>
           <ol className="list-decimal list-inside space-y-2">
-            {analysis.learningRoadmap.map((step) => (
+            {analysis.learningRoadmap?.map((step) => (
               <li key={step}>{step}</li>
             ))}
           </ol>
@@ -130,7 +107,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Recommended Courses" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.courses.map((course) => (
+            {analysis.courses?.map((course) => (
               <li key={course}>{course}</li>
             ))}
           </ul>
@@ -138,7 +115,7 @@ const ResumeAnalysis = () => {
 
         <Card title="Interview Questions" hover>
           <ul className="list-disc list-inside space-y-2">
-            {analysis.interviewQuestions.map((question) => (
+            {analysis.interviewQuestions?.map((question) => (
               <li key={question}>{question}</li>
             ))}
           </ul>

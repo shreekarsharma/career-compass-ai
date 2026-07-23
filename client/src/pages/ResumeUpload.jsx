@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import { uploadResume } from "../services/resumeService";
 
 const ResumeUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -21,7 +23,7 @@ const ResumeUpload = () => {
     setError("");
   };
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -29,10 +31,20 @@ const ResumeUpload = () => {
       return;
     }
 
-    // Connect to API later
-    console.log(selectedFile);
+    try {
+      setLoading(true);
 
-    alert("Resume uploaded successfully! (Demo)");
+      const response = await uploadResume(selectedFile);
+
+      alert(response.message);
+
+      setSelectedFile(null);
+      setError("");
+    } catch (err) {
+      setError(err.message || "Failed to upload resume.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,10 +69,10 @@ const ResumeUpload = () => {
               accept=".pdf"
               onChange={handleFileChange}
               className="block w-full border border-gray-300 rounded-lg p-2
-                         file:mr-4 file:px-4 file:py-2
-                         file:border-0 file:rounded-md
-                         file:bg-blue-600 file:text-white
-                         file:cursor-pointer hover:file:bg-blue-700"
+              file:mr-4 file:px-4 file:py-2
+              file:border-0 file:rounded-md
+              file:bg-blue-600 file:text-white
+              file:cursor-pointer hover:file:bg-blue-700"
             />
           </div>
 
@@ -82,8 +94,8 @@ const ResumeUpload = () => {
             <p className="text-red-600 font-medium">{error}</p>
           )}
 
-          <Button type="submit">
-            Upload Resume
+          <Button type="submit" disabled={loading}>
+            {loading ? "Uploading..." : "Upload Resume"}
           </Button>
         </form>
       </Card>
