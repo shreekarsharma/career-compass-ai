@@ -4,22 +4,25 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(
-    localStorage.getItem("token") || ""
-  );
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token")
+    !!localStorage.getItem("token"),
   );
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
-    if (storedUser) {
+    if (storedUser && storedUser !== "undefined") {
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
   const login = (userData, authToken) => {
+    if (!userData || !authToken) {
+      console.error("Invalid login data", { userData, authToken });
+      return;
+    }
+
     setUser(userData);
     setToken(authToken);
     setIsAuthenticated(true);

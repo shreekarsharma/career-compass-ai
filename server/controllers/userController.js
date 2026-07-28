@@ -60,9 +60,18 @@ export const loginUser = async (req, res) => {
       }
     );
 
+    const userResponse = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
     res.status(200).json({
       message: "Login successful",
       token,
+      user: userResponse,
     });
   } catch (error) {
     res.status(500).json({
