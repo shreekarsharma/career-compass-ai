@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/analysis";
+const API_URL = "https://career-compass-ai-vdgp.onrender.com/api/analysis";
 
 export const analyzeResume = async () => {
   try {
@@ -13,7 +13,7 @@ export const analyzeResume = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response.data;

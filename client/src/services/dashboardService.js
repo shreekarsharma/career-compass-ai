@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/resumes";
+const API_URL = "https://career-compass-ai-vdgp.onrender.com/api/resumes";
 
 export const getResumeHistory = async () => {
   const token = localStorage.getItem("token");

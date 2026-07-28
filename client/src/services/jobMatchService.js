@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/jobmatches";
+const API_URL = "https://career-compass-ai-vdgp.onrender.com/api/jobmatches";
 
 export const getJobMatch = async (jobDescription) => {
   try {
@@ -13,7 +13,7 @@ export const getJobMatch = async (jobDescription) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response.data.data;

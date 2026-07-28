@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/resumes";
+const API_URL = "https://career-compass-ai-vdgp.onrender.com/api/resumes";
 
 export const uploadResume = async (file) => {
   try {
@@ -9,16 +9,12 @@ export const uploadResume = async (file) => {
     const formData = new FormData();
     formData.append("resume", file);
 
-    const response = await axios.post(
-      `${API_URL}/upload`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post(`${API_URL}/upload`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch (error) {
@@ -54,12 +50,12 @@ export const deleteResume = async (id) => {
   const token = localStorage.getItem("token");
 
   return axios.delete(
-    `http://localhost:5000/api/resumes/${id}`,
+    `https://career-compass-ai-vdgp.onrender.com/api/resumes/${id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 

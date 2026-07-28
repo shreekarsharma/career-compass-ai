@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/users/profile";
+const API_URL = "https://career-compass-ai-vdgp.onrender.com/api/users/profile";
 
 export const getProfile = async () => {
   const token = localStorage.getItem("token");
@@ -19,12 +19,12 @@ export const getProfileStats = async () => {
   const token = localStorage.getItem("token");
 
   const response = await axios.get(
-    "http://localhost:5000/api/users/profile/stats",
+    "https://career-compass-ai-vdgp.onrender.com/api/users/profile/stats",
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   return response.data;
