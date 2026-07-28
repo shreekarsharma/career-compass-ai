@@ -43,7 +43,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
           {!isAuthenticated ? (
             <>
               <NavLink to="/" className={navLinkClass}>
