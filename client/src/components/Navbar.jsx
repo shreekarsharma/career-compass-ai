@@ -43,7 +43,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-6">
           {!isAuthenticated ? (
             <>
               <NavLink to="/" className={navLinkClass}>
@@ -98,7 +98,7 @@ const Navbar = () => {
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden"
+          className="lg:hidden text-gray-700"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -107,7 +107,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden border-t bg-white px-4 py-4">
+        <div className="lg:hidden border-t bg-white px-4 py-4">
           <div className="flex flex-col gap-3">
             {!isAuthenticated ? (
               <>
@@ -179,7 +179,7 @@ const Navbar = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="mt-2 px-4 py-2 rounded-lg bg-red-600 text-white"
+                  className="mt-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
                 >
                   Logout
                 </button>
