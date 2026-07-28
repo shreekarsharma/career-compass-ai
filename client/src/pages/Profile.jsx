@@ -100,7 +100,7 @@ const Profile = () => {
               </p>
             </div>
 
-            <Button disabled>
+            <Button disabled className="hidden">
               Edit Profile (Coming Soon)
             </Button>
           </div>
@@ -109,7 +109,7 @@ const Profile = () => {
 
       {/* Statistics */}
       <div className="grid gap-6 md:grid-cols-3">
-        <Card hover>
+        <Card hover className="hidden">
           <h3 className="text-lg font-semibold text-gray-800">
             Uploaded Resumes
           </h3>

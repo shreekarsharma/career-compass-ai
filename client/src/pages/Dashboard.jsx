@@ -72,7 +72,7 @@ const Dashboard = () => {
 
       {/* Resume History */}
       <section>
-        <Card title="Resume History">
+        <Card title="Resume">
           {loading ? (
             <p className="text-gray-500">Loading...</p>
           ) : history.length > 0 ? (
