@@ -23,7 +23,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link
           to={isAuthenticated ? "/dashboard" : "/"}
-          className="text-2xl font-bold text-blue-600"
+          className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600 whitespace-nowrap flex-shrink-0"
         >
           CareerCompass AI
         </Link>
