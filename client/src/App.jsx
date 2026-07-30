@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
+
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -16,53 +18,73 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
+          {/* Public Routes */}
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+
           <Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>
-  }
-/>
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
 
-<Route
-  path="/resume-upload"
-  element={
-    <ProtectedRoute>
-      <ResumeUpload />
-    </ProtectedRoute>
-  }
-/>
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          />
 
-<Route
-  path="/resume-analysis"
-  element={
-    <ProtectedRoute>
-      <ResumeAnalysis />
-    </ProtectedRoute>
-  }
-/>
+          {/* Protected Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-<Route
-  path="/job-match"
-  element={
-    <ProtectedRoute>
-      <JobMatch />
-    </ProtectedRoute>
-  }
-/>
+          <Route
+            path="/resume-upload"
+            element={
+              <ProtectedRoute>
+                <ResumeUpload />
+              </ProtectedRoute>
+            }
+          />
 
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute>
-      <Profile />
-    </ProtectedRoute>
-  }
-/>
+          <Route
+            path="/resume-analysis"
+            element={
+              <ProtectedRoute>
+                <ResumeAnalysis />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/job-match"
+            element={
+              <ProtectedRoute>
+                <JobMatch />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
