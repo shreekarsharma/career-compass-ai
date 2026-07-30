@@ -39,6 +39,11 @@ const Footer = () => {
               </Link>
             </li>
             <li>
+              <Link to="/resume-analysis" className="hover:text-white transition">
+                Analyse Resume
+              </Link>
+            </li>
+            <li>
               <Link to="/job-match" className="hover:text-white transition">
                 Job Match
               </Link>
