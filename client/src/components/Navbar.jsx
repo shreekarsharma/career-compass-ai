@@ -40,18 +40,6 @@ const Navbar = () => {
                 Dashboard
               </NavLink>
 
-              <NavLink to="/resume-upload" className={navLinkClass}>
-                Upload Resume
-              </NavLink>
-
-              <NavLink to="/resume-analysis" className={navLinkClass}>
-                Resume Analysis
-              </NavLink>
-
-              <NavLink to="/job-match" className={navLinkClass}>
-                Job Match
-              </NavLink>
-
               <NavLink to="/profile" className={navLinkClass}>
                 Profile
               </NavLink>
