@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import Button from "../components/Button";
-
+import { toast } from "react-toastify";
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const Register = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
+      toast.warning("Passwords do not match.");
       return;
     }
 
@@ -45,13 +45,13 @@ const Register = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Registered successfully!");
+        toast.success("Registered successfully!");
         navigate("/login");
       } else {
-        alert(data.message || "Registration failed.");
+        toast.error(data.message || "Registration failed.");
       }
     } catch (error) {
-      alert("Something went wrong. Check console.");
+      toast.error("Something went wrong. Check console.");
     }
   };
 

@@ -6,6 +6,7 @@ import {
   getResumeStatus,
 } from "../services/resumeService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const ResumeUpload = () => {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -57,7 +58,7 @@ const ResumeUpload = () => {
 
       const response = await uploadResume(selectedFile);
 
-      alert(response.message);
+      toast.info(response.message);
 
       setSelectedFile(null);
       setError("");

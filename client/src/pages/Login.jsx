@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
-
+import { toast } from "react-toastify";
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -48,14 +48,14 @@ const Login = () => {
         // Update AuthContext (it also stores user/token in localStorage)
         login(data.user, data.token);
 
-        alert("Login successful!");
+        toast.success("Login successful!");
         navigate("/dashboard");
       } else {
-        alert(data.message || "Login failed.");
+        toast.error(data.message || "Login failed.");
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
