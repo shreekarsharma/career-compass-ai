@@ -101,7 +101,7 @@ const Dashboard = () => {
                 </Button>
                   <Link to="/resume-analysis">
                     <Button size="sm" variant="outline">
-                      View
+                      Analyse
                     </Button>
                   </Link>
                 </div>
