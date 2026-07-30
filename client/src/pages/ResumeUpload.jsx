@@ -6,8 +6,8 @@ import {
   getResumeStatus,
 } from "../services/resumeService";
 import { useNavigate } from "react-router-dom";
-const navigate = useNavigate();
 const ResumeUpload = () => {
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
