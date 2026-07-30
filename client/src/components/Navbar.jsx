@@ -6,7 +6,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const navLinkClass = ({ isActive }) =>
-    `transition-colors duration-200 ${
+    `transition-colors duration-200 text-xs sm:text-sm md:text-base ${
       isActive
         ? "text-blue-600 font-semibold"
         : "text-gray-700 hover:text-blue-600"
@@ -19,17 +19,17 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo */}
         <Link
           to={isAuthenticated ? "/dashboard" : "/"}
-          className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600 whitespace-nowrap flex-shrink-0"
+          className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-blue-600 whitespace-nowrap flex-shrink-0"
         >
           CareerCompass AI
         </Link>
 
         {/* Navigation */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-3 sm:space-x-4 md:space-x-6">
           {!isAuthenticated ? (
             <NavLink to="/" className={navLinkClass}>
               Home
@@ -48,19 +48,19 @@ const Navbar = () => {
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {!isAuthenticated ? (
             <>
               <Link
                 to="/login"
-                className="px-4 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 transition"
+                className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg border border-blue-600 text-xs sm:text-sm md:text-base text-blue-600 hover:bg-blue-50 transition"
               >
                 Login
               </Link>
 
               <Link
                 to="/register"
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg bg-blue-600 text-xs sm:text-sm md:text-base text-white hover:bg-blue-700 transition"
               >
                 Register
               </Link>
@@ -68,7 +68,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+              className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg bg-red-600 text-xs sm:text-sm md:text-base text-white hover:bg-red-700 transition"
             >
               Logout
             </button>
