@@ -19,7 +19,7 @@ export const uploadResume = async (req, res) => {
         message: "Please upload a PDF resume.",
       });
     }
-
+    console.log(req.file);
     // Check if the user already has a resume
     const existingResume = await getLatestResume(req.user._id);
 
