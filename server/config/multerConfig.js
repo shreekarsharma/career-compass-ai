@@ -1,15 +1,13 @@
 import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "../config/cloudinary.js";
+import path from "path";
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: async (req, file) => ({
-    folder: "career-compass/resumes",
-    resource_type: "raw",
-    public_id: Date.now().toString(),
-    format: "pdf",
-  }),
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+  },
 });
 
 const fileFilter = (req, file, cb) => {
@@ -20,9 +18,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
+export default multer({
   storage,
   fileFilter,
 });
-
-export default upload;

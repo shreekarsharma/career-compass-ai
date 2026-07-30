@@ -6,7 +6,7 @@ import {
   getUserResumes,
   getLatestResume,
 } from "../services/resumeService.js";
-
+import cloudinary from "../config/cloudinary.js";
 // ===============================
 // Upload Resume
 // ===============================
@@ -33,11 +33,21 @@ export const uploadResume = async (req, res) => {
     // Extract text from uploaded PDF
     const extractedText = await extractTextFromPDF(req.file.path);
 
+    // Upload PDF to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "raw",
+      folder: "career-compass/resumes",
+    });
+
+    // Delete local temp file
+    await fs.promises.unlink(req.file.path);
+
     // Save in MongoDB
     const savedResume = await saveResume({
       user: req.user._id,
-      fileName: req.file.filename,
-      filePath: req.file.path,
+      fileName: result.original_filename || req.file.filename,
+      filePath: result.secure_url,
+      cloudinaryId: result.public_id,
       extractedText,
     });
 
@@ -92,8 +102,10 @@ export const deleteResume = async (req, res) => {
     }
 
     // Delete PDF if it exists
-    if (resume.filePath && fs.existsSync(resume.filePath)) {
-      fs.unlinkSync(resume.filePath);
+    if (resume.cloudinaryId) {
+      await cloudinary.uploader.destroy(resume.cloudinaryId, {
+        resource_type: "raw",
+      });
     }
 
     await resume.deleteOne();

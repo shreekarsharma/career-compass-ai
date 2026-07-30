@@ -18,6 +18,16 @@ const resumeSchema = new mongoose.Schema(
       required: true,
     },
 
+    cloudinaryId: {
+      type: String,
+      required: true,
+    },
+
+    extractedText: {
+      type: String,
+      required: true,
+    },
+
     extractedText: {
       type: String,
       required: true,
