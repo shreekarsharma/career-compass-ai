@@ -5,7 +5,8 @@ import {
   uploadResume,
   getResumeStatus,
 } from "../services/resumeService";
-
+import { useNavigate } from "react-router-dom";
+const navigate = useNavigate();
 const ResumeUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState("");
@@ -60,6 +61,7 @@ const ResumeUpload = () => {
 
       setSelectedFile(null);
       setError("");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Failed to upload resume.");
     } finally {
