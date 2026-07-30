@@ -1,4 +1,4 @@
-import fs from "fs";
+import streamifier from "streamifier";
 import Resume from "../models/Resume.js";
 import { extractTextFromPDF } from "../utils/pdfParser.js";
 import {
@@ -7,6 +7,7 @@ import {
   getLatestResume,
 } from "../services/resumeService.js";
 import cloudinary from "../config/cloudinary.js";
+
 // ===============================
 // Upload Resume
 // ===============================
@@ -16,10 +17,11 @@ export const uploadResume = async (req, res) => {
 
     if (!req.file) {
       return res.status(400).json({
+        success: false,
         message: "Please upload a PDF resume.",
       });
     }
-    console.log(req.file);
+
     // Check if the user already has a resume
     const existingResume = await getLatestResume(req.user._id);
 
@@ -30,22 +32,29 @@ export const uploadResume = async (req, res) => {
       });
     }
 
-    // Extract text from uploaded PDF
-    const extractedText = await extractTextFromPDF(req.file.path);
+    // Upload PDF directly to Cloudinary from memory
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "raw",
+          folder: "career-compass/resumes",
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
 
-    // Upload PDF to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "raw",
-      folder: "career-compass/resumes",
+      streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
     });
 
-    // Delete local temp file
-    await fs.promises.unlink(req.file.path);
+    // Extract text from Cloudinary URL
+    const extractedText = await extractTextFromPDF(result.secure_url);
 
     // Save in MongoDB
     const savedResume = await saveResume({
       user: req.user._id,
-      fileName: result.original_filename || req.file.filename,
+      fileName: result.original_filename || req.file.originalname,
       filePath: result.secure_url,
       cloudinaryId: result.public_id,
       extractedText,
@@ -101,7 +110,6 @@ export const deleteResume = async (req, res) => {
       });
     }
 
-    // Delete PDF if it exists
     if (resume.cloudinaryId) {
       await cloudinary.uploader.destroy(resume.cloudinaryId, {
         resource_type: "raw",

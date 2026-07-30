@@ -1,11 +1,13 @@
-import fs from "fs/promises";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
+import axios from "axios";
 
-export const extractTextFromPDF = async (filePath) => {
-  const data = await fs.readFile(filePath);
+export const extractTextFromPDF = async (pdfUrl) => {
+  const response = await axios.get(pdfUrl, {
+    responseType: "arraybuffer",
+  });
 
   const pdf = await pdfjsLib.getDocument({
-    data: new Uint8Array(data),
+    data: new Uint8Array(response.data),
   }).promise;
 
   let text = "";
@@ -15,9 +17,7 @@ export const extractTextFromPDF = async (filePath) => {
 
     const content = await page.getTextContent();
 
-    const pageText = content.items.map((item) => item.str).join(" ");
-
-    text += pageText + "\n";
+    text += content.items.map((item) => item.str).join(" ") + "\n";
   }
 
   return text;
